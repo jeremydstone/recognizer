@@ -10,15 +10,10 @@ import os.path
 import sys
 import tarfile
 import requests
-#import urllib
 from six.moves import urllib
 import urllib2
 from urllib2 import HTTPError
 import tensorflow as tf
-
-
-
-
 import numpy as np
 import re
 
@@ -36,7 +31,6 @@ def analyze(request):
     temp_path = None
     classifications = None
     try:
-        print("[a]")
         ensure_model_downloaded()
         url = username = request.GET.get('url', None)
         val = URLValidator()
@@ -60,8 +54,6 @@ def analyze(request):
         finally:
             os.close(fd)
 
-        print("[b]")
-        print("downloaded to: " + temp_path)
         classifcations = classify_image(temp_path)
 
         os.remove(temp_path)
@@ -81,7 +73,6 @@ def build_response(classifications, error_response):
     else:
         data['classifications'] = classifications
 
-    print(data)
     return JsonResponse(data)
 
 def _progress(count, block_size, total_size):
@@ -90,19 +81,13 @@ def _progress(count, block_size, total_size):
     sys.stdout.flush()
 
 def ensure_model_downloaded():
-    print("[1]")
     """Download and extract model tar file."""
     dest_directory = IMAGE_DIR
-    print("[2]")
     if not os.path.exists(dest_directory):
         os.makedirs(dest_directory)
-    print("[3]")
     filepath = local_filepath_for_url(DATA_URL, dest_directory)
-    print("[4]")
     if not os.path.exists(filepath):
-        print("[5] (" + DATA_URL + ") (" + filepath + ")")
         filepath, _ = urllib.request.urlretrieve(DATA_URL, filepath, _progress)
-        print("[6]")
         print()
         statinfo = os.stat(filepath)
         print('Successfully downloaded', filepath, statinfo.st_size, 'bytes.')
@@ -111,7 +96,6 @@ def ensure_model_downloaded():
 def local_filepath_for_url(url,dest_directory):
     filename = url.split('/')[-1]
     return os.path.join(dest_directory, filename)
-
 
 VALID_IMAGE_EXTENSIONS = [
     ".jpg",
@@ -155,7 +139,6 @@ def classify_image(image):
       else:
           score_str = "<1"
       classifications.append({'name': human_string, 'score': score_str})
-      print('%s (score = %s)' % (human_string, score_str))
 
   return classifications
 
