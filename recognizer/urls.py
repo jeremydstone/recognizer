@@ -15,9 +15,10 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^ajax/analyze/$', views.analyze, name='anaylze'),
-    url(r'^admin/', include(admin.site.urls)),
-]
+    url(r'^ajax/analyze/$', views.analyze, name='analyze'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

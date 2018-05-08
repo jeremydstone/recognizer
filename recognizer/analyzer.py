@@ -11,8 +11,6 @@ import sys
 import tarfile
 import requests
 from six.moves import urllib
-import urllib2
-from urllib2 import HTTPError
 import tensorflow as tf
 import numpy as np
 import re
